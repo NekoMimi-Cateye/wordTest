@@ -64,8 +64,46 @@ if __name__ == "__main__":
         for i in range(len(icQ)):
             print("問題: {}\n正答: {}\n\n".format(icQ[i], icA[i]))
 
-        ##ライトナーシステムに従いファイルに収納し直す
-        
+        #ライトナーシステム
+        ##不正解データをsession1に収納
+        ###session番号: 1...上書き/other...追加
+        if (session != 1):
+            f1 = open(files[0], 'r', encoding = 'utf-8')
+            lines = f1.readlines()
+            f1.close()
+            ###問題データと解答データに分ける
+            for i in range(len(lines) // 2):
+                icQ = np.append(icQ, lines[i * 2].replace('\n', '').replace('\ufeff', ''))
+                icA = np.append(icA, lines[i * 2 + 1].replace('\n', '').replace('\ufeff', ''))
+        ###ファイル書き込み
+        f1 = open(files[0], 'w', encoding = 'utf-8')
+        for i in range(len(icQ)):
+            f1.write(icQ[i])
+            f1.write('\n')
+            f1.write(icA[i])
+            if (i != len(icQ) - 1):
+                f1.write('\n')
+        f1.close()
+        ##正解データを次のsessionに収納
+        ###session番号: 5...上書き/other...追加
+        if (session == 5):
+            f2 = open(files[4], 'r', encoding = 'utf-8')
+        else:
+            f2 = open(files[session], 'r', encoding = 'utf-8')
+            lines = f2.readlines()
+            f2.close()
+            ###問題データと解答データに分ける
+            for i in range(len(lines) // 2):
+                cQ = np.append(cQ, lines[i * 2].replace('\n', '').replace('\ufeff', ''))
+                cA = np.append(cA, lines[i * 2 + 1].replace('\n', '').replace('\ufeff', ''))
+        ###ファイル書き込み
+        f2 = open(files[0], 'w', encoding = 'utf-8')
+        for i in range(len(cQ)):
+            f2.write(cQ[i])
+            f2.write('\n')
+            f2.write(cA[i])
+            if (i != len(cQ) - 1):
+                f2.write('\n')
+        f2.close()
     else:
         print("[error] 正しい番号が入力されませんでした")
-        time.sleep(3)
